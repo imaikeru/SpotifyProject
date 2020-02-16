@@ -91,7 +91,7 @@ public final class SpotifyServer implements AutoCloseable {
         return CommonConstants.QUOTATION_MARK + str + CommonConstants.QUOTATION_MARK;
     }
 
-    private static void logExceptionMessageToFile(final String exceptionMessage) {
+    public static void logExceptionMessageToFile(final String exceptionMessage) {
         try (final var fileWriter = new FileWriter(CommonConstants.LOG_FILE_PATH, true);
                 final var printWriter = new PrintWriter(fileWriter)) {
             printWriter.println(exceptionMessage);
@@ -611,6 +611,7 @@ public final class SpotifyServer implements AutoCloseable {
         sendMessageToLoggedInUser(attachedEmail, Messages.PLAYING_SONG + quote(songName));
         final User user = loggedInUsers.get(attachedEmail);
         final MusicStreamer musicStreamer = new MusicStreamer(user, songName);
+        musicStreamer.setDaemon(true);
         musicStreamer.start();
     }
 

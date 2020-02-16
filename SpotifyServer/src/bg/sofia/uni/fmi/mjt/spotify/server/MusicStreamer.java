@@ -62,7 +62,9 @@ public class MusicStreamer extends Thread {
                     try {
                         Thread.sleep(1050);
                     } catch (final InterruptedException e) {
-                        System.out.println(e.getMessage());
+                        SpotifyServer.logExceptionMessageToFile(e.getMessage());
+                        user.setListeningToMusic(false);
+                        return;
                     }
                 }
                 final int bytesSent = user.getAudioSocketChannel().write(buffer);
@@ -77,7 +79,9 @@ public class MusicStreamer extends Thread {
                 user.setSongPlayed(null);
             }
         } catch (UnsupportedAudioFileException | IOException e1) {
-            System.out.println(e1.getMessage());
+            user.setListeningToMusic(false);
+            SpotifyServer.logExceptionMessageToFile(e1.getMessage());
+            return;
         }
     }
 
